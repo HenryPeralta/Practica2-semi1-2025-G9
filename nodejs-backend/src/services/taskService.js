@@ -15,7 +15,7 @@ export const createTaskService = async (req, res) => {
   const task = await createTask(usuario_id, titulo, descripcion, completada)
 
   return {
-    id: task.id
+    task
   }
 }
 

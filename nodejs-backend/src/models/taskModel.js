@@ -23,7 +23,11 @@ export const createTask = async (
     })
   }
   return {
-    id: rows.insertId
+    id: rows.insertId,
+    usuario_id,
+    titulo,
+    descripcion,
+    completada
   }
 }
 

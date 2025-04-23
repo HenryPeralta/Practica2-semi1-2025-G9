@@ -22,7 +22,7 @@ export const login = async (req, res) => {
     return responseHandler(res, {
       stringCode: 'LOGIN_SUCCESS',
       message: 'Inicio de sesión exitoso',
-      payload: { token }
+      payload: { token, id }
     })
   } catch (error) {
     const { message, cause } = error
