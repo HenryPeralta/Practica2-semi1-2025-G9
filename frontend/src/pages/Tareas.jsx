@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/Tareas.css";
 
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL + "/task";
 
 const Tareas = () => {
     const [tareas, setTareas] = useState([]);
@@ -13,9 +13,20 @@ const Tareas = () => {
 
     const obtenerTareas = async () => {
         try {
-            const response = await fetch(`${API_URL}/tareas`);
+            const id = localStorage.getItem('id');
+            const url = `${API_URL}/user/${id}`;
+
+            console.log("URL de la API:", url);
+
+            const response = await fetch(url);
+
             const data = await response.json();
-            setTareas(data);
+
+            if (data.payload == null) {
+                console.log("No hay tareas disponibles.");
+                return;
+            }
+            setTareas(data.payload);
         } catch (error) {
             console.error("Error al obtener las tareas:", error);
         }
@@ -29,13 +40,18 @@ const Tareas = () => {
     const agregarTarea = async () => {
         if (nuevaTarea.titulo && nuevaTarea.descripcion) {
             try {
-                const response = await fetch(`${API_URL}/tareas`, {
+                // usuario_id, titulo, descripcion
+                const id = localStorage.getItem('id');
+                const response = await fetch(`${API_URL}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...nuevaTarea, fecha: nuevaTarea.fecha || new Date().toLocaleDateString() }),
+                    body: JSON.stringify({ usuario_id: id, titulo: nuevaTarea.titulo, descripcion: nuevaTarea.descripcion, completada: false }),
                 });
-                const nueva = await response.json();
-                setTareas([...tareas, nueva]);
+                const data = await response.json();
+
+                console.log("Tarea agregada:", data);
+
+                setTareas([...tareas, data.payload.task]);
                 setNuevaTarea({ titulo: '', descripcion: '', fecha: '' });
             } catch (error) {
                 console.error("Error al agregar la tarea:", error);
@@ -47,7 +63,7 @@ const Tareas = () => {
         try {
             const tareaActualizada = tareas.find((tarea) => tarea.id === id);
             const actualizada = { ...tareaActualizada, [campo]: valor };
-            await fetch(`${API_URL}/tareas/${id}`, {
+            await fetch(`${API_URL}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(actualizada),
@@ -62,7 +78,7 @@ const Tareas = () => {
         try {
             const tarea = tareas.find((tarea) => tarea.id === id);
             const actualizada = { ...tarea, completada: !tarea.completada };
-            await fetch(`${API_URL}/tareas/${id}`, {
+            await fetch(`${API_URL}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(actualizada),
@@ -75,12 +91,20 @@ const Tareas = () => {
 
     const eliminarTarea = async (id) => {
         try {
-            await fetch(`${API_URL}/tareas/${id}`, { method: 'DELETE' });
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
             setTareas(tareas.filter((tarea) => tarea.id !== id));
         } catch (error) {
             console.error("Error al eliminar la tarea:", error);
         }
     };
+
+    const formatearFecha = (fecha) => {
+        const date = fecha ? new Date(fecha) : new Date();
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const anio = date.getFullYear();
+        return `${dia}/${mes}/${anio}`;
+    }; 
 
     return (
         <div className="tareas-container">
@@ -109,12 +133,12 @@ const Tareas = () => {
                 <button onClick={agregarTarea}>Agregar Tarea</button>
             </div>
             <ul className="tareas-list">
-                {tareas.map((tarea) => (
+                {tareas.map((tarea) => (                    
                     <li key={tarea.id} className={tarea.completada ? 'completed' : ''}>
                         <div className="tarea-text">
                             <h3>{tarea.titulo}</h3>
                             <p>{tarea.descripcion}</p>
-                            <p>Fecha: {tarea.fecha}</p>
+                            <p>Fecha: {formatearFecha(tarea.fecha_creacion) }</p>
                         </div>
                         <div className="tarea-actions">
                             <button className="completar" onClick={() => marcarCompletada(tarea.id)}>
