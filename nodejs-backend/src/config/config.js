@@ -2,7 +2,7 @@ process.loadEnvFile()
 
 export const {
   PORT = 8000,
-  FRONTEND_URL = 'http://localhost:5173',
+  FRONTEND_URL,
   JWT_SECRET,
   DB_HOST,
   DB_USER,
