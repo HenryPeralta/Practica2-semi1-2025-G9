@@ -1,5 +1,7 @@
 # Manual Técnico
 
+---
+
 ## Integrantes
 |             Nombre             |   Carnet  |
 | :----------------------------  | :------   |
@@ -37,13 +39,13 @@ La aplicación TaskFlow + CloudDrive se desplegó utilizando servicios equivalen
 
 A continuación, se describen los usuarios IAM creados, sus roles y políticas asignadas:
 
-### Usuario: `taskflow-uploader`
+### Usuario S3
 - **Políticas:**
   - `AmazonS3FullAccess`
   - `LambdaInvokeFunction`
   - `APIGatewayInvokeFullAccess`
 
-### Usuario: `taskflow-ec2-backend`
+### Usuario EC2
 - **Políticas:**
   - `AmazonEC2FullAccess`
   - `AmazonRDSFullAccess`
@@ -55,22 +57,32 @@ A continuación, se describen los usuarios IAM creados, sus roles y políticas a
 ### AWS
 
 #### Buckets de Amazon S3
-![S3 Bucket](/IMG)
+![S3 Bucket](/IMG/S3.jpeg)
+
+![S3 Bucket](/IMG/S3_2.jpeg)
 
 #### Instancias de EC2
-![EC2 Instances](/IMG)
+![EC2 Instances](/IMG/EC2.jpeg)
+
+![EC2 Instances](/IMG/EC2_Python.jpeg)
 
 #### Balanceador de Carga (ELB)
-![Load Balancer](/IMG)
+![Load Balancer](/IMG/elb.jpeg)
 
 #### Base de Datos (RDS)
-![RDS](/IMG)
+![RDS](/IMG/BD.jpeg)
 
 #### Funciones Lambda
-![Lambda](/IMG)
+![Lambda](/IMG/funciones.jpeg)
 
 #### API Gateway
-![API Gateway](/IMG)
+![API Gateway](/IMG/archivos_node.jpeg)
+
+![API Gateway](/IMG/cargar_node.jpeg)
+
+![API Gateway](/IMG/archivos_python.jpeg)
+
+![API Gateway](/IMG/cargar_python.jpeg)
 
 ### Azure
 
@@ -101,6 +113,27 @@ Durante la implementación se observaron las siguientes diferencias entre AWS y 
 
 Ambas plataformas permiten lograr la misma solución, pero cada una presenta ventajas según la experiencia del equipo y los requisitos del proyecto.
 
+---
 
 # Manual de Usuario
+En este apartado se muestran imagenes del funcionamiento que tiene la aplicación con los servicios desplegados en la nube, el manual sirve como guia para el usuario para su funcionamiento.
 
+---
+### Login
+![](/IMG/Login.png)
+Se solicita un usuario y contraseña para acceder al sistema, si no posee una cuenta puede registrarse para hacer uso del sistema.
+
+---
+### Register
+![](/IMG/Register.png)
+Registrarse en el sistema con los datos que se le solicitan para acceder usando el login.
+
+---
+### Tareas
+![](/IMG/Tareas.jpeg)
+En este apartado podrá crear tareas, actualizarlas o eliminarlas según las necesidades del usuario.
+
+---
+### Archivos
+![](/IMG/Archivos.jpeg)
+En este apartado el usuario podrá subir sus archivos (imagenes y pdfs) para almacenarlos y posteriormente podrá descargarlos o visualizarlos según las necesidades del usuario.
